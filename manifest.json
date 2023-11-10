@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "backlog-linkCopier",
+    "version": "0.0.1",
+    "author": "7machi@nanamachi.net",
+    "description": "backlogの課題番号コピーをmarkdown形式やリンク付きリッチテキストで行う拡張機能",
+    "permissions": [
+        "clipboardWrite",
+        "clipboardRead"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*.backlog.com/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_idle"
+        }
+    ]
+}
