@@ -11,13 +11,13 @@ function addOnClickEvent(el) {
         if (event.ctrlKey || event.metaKey) {
             // Alt + Ctrl (Win) または Alt + Cmd (Mac) の場合はHTML形式でコピー
             navigator.clipboard.readText()
-            .then(formatToHtmlLink)
-            .then(writeText);
+                .then(formatToHtmlLink)
+                .then(writeText);
         } else {
             // Alt単体の場合はMarkDown形式でコピー
             navigator.clipboard.readText()
-            .then(formatToMarkdownLink)
-            .then(writeText);
+                .then(formatToMarkdownLink)
+                .then(writeText);
         }
     });
     el.__mdlinker_injected = true;

@@ -1,0 +1,24 @@
+{
+  "name": "backlog-linkcopier",
+  "version": "0.0.1",
+  "description": "backlogの課題キーコピー機能を拡張するChrome拡張機能くん",
+  "main": "content.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nanamachi/backlog-linkCopier.git"
+  },
+  "author": "nanamachi",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/Nanamachi/backlog-linkCopier/issues"
+  },
+  "homepage": "https://github.com/Nanamachi/backlog-linkCopier#readme",
+  "devDependencies": {
+    "eslint": "^8.53.0",
+    "jest": "^29.7.0"
+  }
+}
