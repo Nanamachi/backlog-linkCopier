@@ -1,41 +1,27 @@
-var BASE_URL = 'https://' + window.location.host;
+const BASE_URL = 'https://' + window.location.host;
 
-function addOnClickEvent(el) {
-    if (el.__mdlinker_injected) return;
-    el.addEventListener('click', function(event) {
-        // Altキーが押されてない場合は無視
-        if (!event.altKey) {
-            return;
-        }
+function copyLinkToClipboard(event) {
+    // Altキーが押されてない場合は無視
+    if (!event.altKey) {
+        return;
+    }
 
-        if (event.ctrlKey || event.metaKey) {
-            // Alt + Ctrl (Win) または Alt + Cmd (Mac) の場合はHTML形式でコピー
-            navigator.clipboard.readText()
-                .then(formatToHtmlLink)
-                .then(writeText);
-        } else {
-            // Alt単体の場合はMarkDown形式でコピー
-            navigator.clipboard.readText()
-                .then(formatToMarkdownLink)
-                .then(writeText);
-        }
-    });
-    el.__mdlinker_injected = true;
+    if (event.ctrlKey || event.metaKey) {
+        // Alt + Ctrl (Win) または Alt + Cmd (Mac) の場合はHTML形式でコピー
+        navigator.clipboard.readText()
+            .then(formatToHtmlLink)
+            .then(writeText);
+    } else {
+        // Alt単体の場合はMarkDown形式でコピー
+        navigator.clipboard.readText()
+            .then(formatToMarkdownLink)
+            .then(writeText);
+    }
 }
 
-function constructTicketUrl(text) {
-    return BASE_URL + '/view/' + text.match(/([A-Z]+-[0-9]+)/)[0];
-}
-
-function constructHtmlText(text) {
-    var ticketUrl = constructTicketUrl(text);
-    return '<a href="' + ticketUrl + '">' + text + '</a>';
-}
-
-function constructMarkdownText(text) {
-    var ticketUrl = constructTicketUrl(text);
-    return '[' + text + '](' + ticketUrl + ')';
-}
+const constructTicketUrl    = text => `${BASE_URL}/view/${text.match(/([A-Z]+-[0-9]+)/)[0]}`;
+const constructMarkdownText = text => `[${text}](${constructTicketUrl(text)})`;
+const constructHtmlText     = text => `<a href="${constructTicketUrl(text)}">${text}</a>`;
 
 function formatToMarkdownLink(copyText) {
     return {
@@ -56,17 +42,23 @@ function writeText(data) {
     navigator.clipboard.write([new ClipboardItem(data)]);
 }
 
+function addEventListenerByQuerySelector(selector, event, fn) {
+    var list = document.querySelectorAll(selector);
+    if (list.length > 0) {
+        Array.from(list).forEach(function(el) {
+            el.addEventListener(event, fn);
+        });
+    }
+}
+
 function main() {
     // 一覧ページでのコピーボタン
-    var trigElems = document.querySelectorAll('.copy-trigger > ._trigger-text');
-    if (trigElems.length > 0) {
-        Array.from(trigElems).forEach(addOnClickEvent);
-    }
+    addEventListenerByQuerySelector('.copy-trigger > ._trigger-text', 'click', copyLinkToClipboard);
+
     // 詳細ページでのコピーボタン
-    trigElems = document.getElementsByClassName('copy-key-btn');
-    if (trigElems.length > 0) {
-        Array.from(trigElems).forEach(addOnClickEvent);
-    }
+    addEventListenerByQuerySelector('.copy-key-btn', 'click', copyLinkToClipboard);
+
+    // 新しいエレメントに付いて監視する
     setTimeout(main, 1000);
 }
 
